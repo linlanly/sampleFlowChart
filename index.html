@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>流程图使用示例</title>
+  <link rel="stylesheet" href="./flowchart.css">
+  <script src="./flowchart.js" type="text/javascript"></script>
+  <script>
+    const flowChart = [
+      {
+        title: '办公用房使用单位',
+        list: [
+          { title: '单位申请', notify: '单位申请(关干物业处置的公函或请示附OA审批材料、房屋安全鉴定报告、城乡规划调整文件、转换用途方案等文件)', id: 1, line: 1, to: [2] },
+          { title: '选择处置类型', notify: '', id: 2, line: 2, to: [{ id: 13, text: '有偿、报废、拆除、转换用途' }, { id: 12, text: '无偿调拨、置换' }] },
+          { title: '市财政审批结果', notify: '报市财政局审批', id: 3, line: 5, to: [4] },
+          { title: '审批是否通过', notify: '', id: 4, line: 6, to: [{ id: 5, text: '通过' }, { id: 1, text: '不通过', color: 'red' }] },
+          { title: '市财政审批结果', notify: '上传市财政局批复文件及财政系统审批记录', id: 5, line: 7, to: [15] },
+          { title: '处置实施', notify: '资产评估(上传资产评估结果文件)', id: 6, line: 9, to: [7] },
+          { title: '处置实施', notify: '签订协议(拍卖确认单、拆迁协议、补偿协议、交接书等材料)', id: 7, line: 10, to: [9] },
+          { title: '处置实施', notify: '落实并执行转换用途方案', id: 8, line: 10, to: [11] },
+          { title: '处置实施', notify: '相关票据及财务处理凭证(如报废残值处置单据、非税票据等材料)', id: 9, line: 11, to: [11] },
+          { title: '处置实施', notify: '签订物业交接书', id: 10, line: 11, to: [11] },
+          { title: '归档', notify: '物业处置利用归档', id: 11, line: 12 }
+        ]
+      },
+      {
+        title: '市机关事务管理局',
+        list: [
+          { title: '接收单位是否系统内部单位', notify: '', id: 12, line: 2, to: [{ id: 17, text: '是' }, { id: 13, text: '否', color: 'red' }] },
+          { title: '管理局审批', notify: '相关处室审批，会议议定或领导签批', id: 13, line: 3, to: [14] },
+          { title: '审批是否通过', notify: '', id: 14, line: 4, to: [{ id: 3, text: '通过' }, { id: 1, text: '不通过', color: 'red' }] },
+          { title: '管理局复审', notify: '市机关事务管理局复审', id: 15, line: 8, to: [16] },
+          { title: '复审是否通过', notify: '', id: 16, line: 9, to: [{ id: 6, text: '通过' }, { id: 5, text: '不通过', color: 'red' }, { id: 8, text: '转换用途' }, { id: 10, text: '无偿调拨、置换（外部单位）' }] }
+        ]
+      },
+      {
+        title: '接收单位',
+        list: [
+          { title: '管理局审批', notify: '现场勘查(按房产接收流程办理)', id: 17, line: 2 }
+        ]
+      }
+    ]
+    function showDetail(doc) {
+      let str = doc.getAttribute('data-title')
+      let flowChartBox = document.getElementById('flowChartBox')
+      if (str === '详细流程') {
+        doc.setAttribute('data-title', '收起')
+        flowChartBox.style.display = 'flex'
+        doc.classList.add('fold')
+      } else {
+        doc.setAttribute('data-title', '详细流程')
+        flowChartBox.style.display = 'none'
+        doc.classList.remove('fold')
+      }
+    }
+    window.onload = function () {      
+      new FlowChart({ elemId: 'flowChartBox', flowChart })
+      let doc = document.getElementById('flowChartBox')
+      doc.style.display = 'none'
+    }
+  </script>
+</head>
+
+<body>
+  <div class="flow-chart-box" id="flowChartBox"></div>
+  <div class="detailed-process-btn" data-title="详细流程" onclick="showDetail(this)"></div>
+</body>
+
+</html>
