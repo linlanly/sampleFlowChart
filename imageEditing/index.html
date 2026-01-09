@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>图片编辑</title>
+  <meta charset="utf-8" />
+  <link href="./imageEditing.css" rel="stylesheet" />
+  <script src="./fabric.min.js"></script>
+  <script src="./imageEditing.js"></script>
+</head>
+
+<body>
+  <div class="draw-panel">
+    <h4>在线画图</h4>
+    <div class="fold-info">
+      上传图片：<input type="file" id="imageInfo" class="btn btn-primary" accept="image/jpeg, image/png, image/gif">
+    </div>
+    <div class="fold-info">
+      添加图形：
+      <div class="shape-box" onclick="drawType('rectangle', this)" title="矩形">□</div>
+      <div class="shape-box" onclick="drawType('ellipse', this)" title="椭圆">○</div>
+      <div class="shape-box" onclick="drawType('triangle', this)" title="三角形">△</div>
+      <div class="shape-box" onclick="drawType('arrow', this)" title="箭头">↗</div>
+      <div class="shape-box" onclick="drawType('drawingMode', this)" title="画笔">✎</div>
+      <div class="shape-box" onclick="drawType('inputText', this)" title="文字">A</div>
+    </div>
+    <div class="fold-info">
+      配置：
+      颜色
+      <input type="color" id="color" />
+      宽度
+      <input type="number" min="1" max="9" step="1" id="lineWidth" value="2">
+      <temple id="fontSizeGroup">
+        字体
+        <input type="number" min="10" max="40" step="1" id="fontSize" value="20">
+      </temple>
+    </div>
+    <div class="fold-info">
+      生成图片：
+      <button class="btn btn-primary" type="button" onclick="saveImage()">下载</button>
+    </div>
+    <div class="fold-info">
+      清空内容：
+      <button class="btn btn-primary" type="button" onclick="clearContent()">清空</button>
+    </div>
+    <canvas id="canvas" style="border: 1px solid silver"></canvas>
+  </div>
+  <script>
+    let drawObj
+    setTimeout(() => {
+      drawObj = new editImage()
+    }, 1000)
+    function drawType(type, doc) {
+      let typeDocs = document.querySelectorAll('.shape-box')
+      for (let i = 0; i < typeDocs.length; i++) {
+        typeDocs[i].classList.remove('active')
+      }
+      doc.classList.add('active')
+      if (type === 'inputText') {
+        document.querySelector('#fontSizeGroup').style.display = 'block'
+      } else {
+        document.querySelector('#fontSizeGroup').style.display = 'none'
+      }
+      if (drawObj) {
+        drawObj.drawBefore(type)
+      }
+    }
+
+    function saveImage() {
+      if (drawObj) {
+        drawObj.saveImage()
+      }
+    }
+
+    function clearContent() {
+      if (drawObj) {
+        drawObj.clearContent()
+      }
+    }
+
+    // 限制粗细
+    document.querySelector('#lineWidth').addEventListener('change', function () {
+      if (parseInt(this.value) > 9) {
+        this.value = 9
+      }
+      if (parseInt(this.value) < 1) {
+        this.value = 1
+      }
+      if (drawObj) {
+        drawObj.drawBefore()
+      }
+    })
+
+    document.querySelector('#imageInfo').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        drawObj.setBackgroundImage(e.target.result)
+      }
+      reader.readAsDataURL(file)
+    })
+
+    // 限制字体大小
+    document.querySelector('#fontSize').addEventListener('change', function () {
+      if (parseInt(this.value) > 40) {
+        this.value = 40
+      }
+      if (parseInt(this.value) < 10) {
+        this.value = 10
+      }
+      if (drawObj) {
+        drawObj.drawBefore()
+      }
+    })
+
+    document.querySelector('#color').addEventListener('change', function () {
+      if (drawObj) {
+        drawObj.drawBefore()
+      }
+    })
+  </script>
+</body>
+
+</html>

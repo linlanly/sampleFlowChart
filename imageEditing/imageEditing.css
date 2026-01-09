@@ -1,0 +1,32 @@
+.fold-info {
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+}
+
+.shape-box {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  background-color: #E9ECF0;
+  color: #333;
+  margin-left: 10px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 26px;
+}
+
+.shape-box.active {
+  background-color: #4899BE;
+  color: white;
+}
+
+#fontSizeGroup {
+  display: none;
+}
+input {
+  margin-right: 8px;
+}
